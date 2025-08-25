@@ -1,0 +1,38 @@
+OBJETIVO PRINCIPAL:	Armar el circuito de control del robot de competencia - Seguidor de linea, Futbolero &/o Sumo
+* Separar la lectura en otra PCB
+* Separar el diseño 3D aparte de las pcbs 			No hacer un T que sea una placa de cobre entera
+* Simplificar el trabajo para el equipo de futbol &/o Sumo
+
+
+REQUIRIMIENTOS:
+* Debe tener espacio para sostener los motores o agarrarlos desde el pcb. (optimizar lugar - como en el caso de los competidores)
+* Debe tener entradas para la placa de sensores. Conector plano o molex, recibe la lecturas Analógicas y los alimenta vcc&gnd
+* Debe tener tira de pines para quitar o cambiar los puentesH o el uc
+* Debe tener cables con un conector para alimentar la pcb
+* Debe tener un regulador de tensión para alimentar desde una pila externa mediante un conector (con. cable-cable)
+* Si es necesario usaremos componentes SMD
+* En el caso del seguidor, vamos a usar:
+	* microC	- ESP32 		xxxxxxxxx	(tengo un Esp-wroom-32)
+	* PUENTE H	- drv8833
+	* MOTORES	- MICRO POLOLU 6V 500 RPM
+* Debe tener pulsadores o botones integrados en el pcb
+	- Encendido del robot
+	- Calibración de sensores	(leer que valores son blancos y cuales son negros - cambia con la pista)
+
+
+TO-DO:
+* Charlar sobre el presupuesto y tiempo a dedicar + que buscamos conseguir con la competencia	(Aprobar TD2)
+* Leer los reglamentos en caso de excepciones con los componentes que usemos
+* Buscar y definir que baterias vamos a utilizar
+* Definir el tamaño del pcb y chasis (Trapecio)
+* Buscar el modelo 3D aprox de los motores
+* Buscar y definir que conectores vamos a usar
+* Verificar el micro-controlador que estamos usando
+
+DONE:
+* Sensores a usar QTR-8A. Pueden trabajar con 3.3V  (Modulo de 8 sensores con 10 pines, vcc y gnd + 8 salidas Analogs)
+
+APUNTES:
+* Los sensores deben ir conectados a los ADC del ESP32
+* Los puentesH deben ir conectados a tres pines, dos de control y uno de pwm
+* Vin del esp32 es entre 4 y 12 V
