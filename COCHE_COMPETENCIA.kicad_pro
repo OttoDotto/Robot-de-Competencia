@@ -508,7 +508,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "COCHE_COMPETENCIA.stl",
+      "step": "COCHE_COMPETENCIA.step",
       "svg": "",
       "vrml": "COCHE_COMPETENCIA.wrl"
     },
