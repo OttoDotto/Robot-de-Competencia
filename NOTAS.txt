@@ -1,3 +1,5 @@
+git: https://github.com/OttoDotto/Robot-de-Competencia
+
 OBJETIVO PRINCIPAL:	Armar el circuito de control del robot de competencia - Seguidor de linea, Futbolero &/o Sumo
 * Separar la lectura en otra PCB
 * Separar el diseño 3D aparte de las pcbs 			No hacer un T que sea una placa de cobre entera
@@ -12,8 +14,8 @@ REQUIRIMIENTOS:
 * Debe tener un regulador de tensión para alimentar desde una pila externa mediante un conector (con. cable-cable)
 * Si es necesario usaremos componentes SMD
 * En el caso del seguidor, vamos a usar:
-	* microC	- ESP32 		xxxxxxxxx	(tengo un Esp-wroom-32)
-	* PUENTE H	- drv8833
+	* microC	- ESP WROOM-32 DEVKIT V1
+	* PUENTE H	- DRV8833			MODO PARALELO			
 	* MOTORES	- MICRO POLOLU 6V 500 RPM
 * Debe tener pulsadores o botones integrados en el pcb
 	- Encendido del robot
@@ -29,10 +31,42 @@ TO-DO:
 * Buscar y definir que conectores vamos a usar
 * Verificar el micro-controlador que estamos usando
 
+
 DONE:
-* Sensores a usar QTR-8A. Pueden trabajar con 3.3V  (Modulo de 8 sensores con 10 pines, vcc y gnd + 8 salidas Analogs)
+* Sensores a usar QTR-8A. Pueden trabajar con 3.3V  (Modulo de 8 sensores con 11 pines, vcc y gnd + 8 salidas Analogs + pin apagarleds)
+
 
 APUNTES:
 * Los sensores deben ir conectados a los ADC del ESP32
 * Los puentesH deben ir conectados a tres pines, dos de control y uno de pwm
 * Vin del esp32 es entre 4 y 12 V
+
+* PINES ESP32 ELEJIDOS:	(D = GPIO !!!!)
+Sensores (fila bajo el USB, contiguos para pistas rectas)
+S1 → GPIO36 (VP)
+S2 → GPIO39 (VN)
+S3 → GPIO34
+S4 → GPIO35
+S5 → GPIO32
+S6 → GPIO33
+S7 → GPIO27
+S8 → GPIO14
+
+Puente H izquierdo (M1) – lado izquierdo del ESP32
+IN1_M1 → GPIO26 (PWM)
+IN2_M1 → GPIO25 (PWM)
+SLEEP_M1 → GPIO16		(PROBLEMA, ESTA DEL OTRO LADO)
+
+Puente H derecho (M2) – lado derecho del ESP32
+IN1_M2 → GPIO21 (PWM)
+IN2_M2 → GPIO18 (PWM)
+SLEEP_M2 → GPIO23
+
+Botones, buzzer, LED (abajo/derecha)
+SW1 → GPIO22 (entrada con pull-up interno)
+SW2 → GPIO19 (entrada con pull-up interno)
+BUZZER → GPIO17 (PWM con LEDC)			(PROBLEMA, queda atrapado)
+LED → GPIO13 (salida)
+
+	
+

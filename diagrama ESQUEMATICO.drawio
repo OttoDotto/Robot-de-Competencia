@@ -164,7 +164,7 @@
         <mxCell id="WJctupeSjXz4ceWDNvC2-13" value="DRV8833&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;div&gt;(DRIVER MOTOR PUENTE H)&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="WJctupeSjXz4ceWDNvC2-1" vertex="1">
           <mxGeometry x="665" y="420" width="150" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="WJctupeSjXz4ceWDNvC2-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#e51400;strokeColor=#B20000;" parent="WJctupeSjXz4ceWDNvC2-1" source="WJctupeSjXz4ceWDNvC2-16" target="WJctupeSjXz4ceWDNvC2-13" edge="1">
+        <mxCell id="WJctupeSjXz4ceWDNvC2-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#e51400;strokeColor=#B20000;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" parent="WJctupeSjXz4ceWDNvC2-1" source="WJctupeSjXz4ceWDNvC2-16" target="WJctupeSjXz4ceWDNvC2-13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="WJctupeSjXz4ceWDNvC2-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;" parent="WJctupeSjXz4ceWDNvC2-1" source="WJctupeSjXz4ceWDNvC2-16" target="WJctupeSjXz4ceWDNvC2-10" edge="1">
@@ -214,12 +214,13 @@
         <mxCell id="ZArVrt2zg_2M8aDylMOV-11" value="(OPTOACOPLADOR)" style="rounded=1;whiteSpace=wrap;html=1;" parent="WJctupeSjXz4ceWDNvC2-1" vertex="1">
           <mxGeometry x="480" y="540" width="140" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ZArVrt2zg_2M8aDylMOV-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;" parent="WJctupeSjXz4ceWDNvC2-1" target="WJctupeSjXz4ceWDNvC2-19" edge="1">
+        <mxCell id="ZArVrt2zg_2M8aDylMOV-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" parent="WJctupeSjXz4ceWDNvC2-1" target="WJctupeSjXz4ceWDNvC2-19" edge="1" source="WJctupeSjXz4ceWDNvC2-16">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="397.5" y="300" as="sourcePoint" />
             <mxPoint x="740.5" y="405" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="640" y="301" />
+              <mxPoint x="398" y="330" />
+              <mxPoint x="640" y="330" />
               <mxPoint x="640" y="520" />
               <mxPoint x="740" y="520" />
             </Array>
