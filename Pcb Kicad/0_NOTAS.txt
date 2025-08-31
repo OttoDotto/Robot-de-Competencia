@@ -1,5 +1,3 @@
-git: https://github.com/OttoDotto/Robot-de-Competencia
-
 OBJETIVO PRINCIPAL:	Armar el circuito de control del robot de competencia - Seguidor de linea, Futbolero &/o Sumo
 * Separar la lectura en otra PCB
 * Separar el diseño 3D aparte de las pcbs 			No hacer un T que sea una placa de cobre entera
@@ -40,7 +38,6 @@ APUNTES:
 * Los sensores deben ir conectados a los ADC del ESP32
 * Los puentesH deben ir conectados a tres pines, dos de control y uno de pwm
 * Vin del esp32 es entre 4 y 12 V
-
 * PINES ESP32 ELEJIDOS:	(D = GPIO !!!!)
 Sensores (fila bajo el USB, contiguos para pistas rectas)
 S1 → GPIO36 (VP)
