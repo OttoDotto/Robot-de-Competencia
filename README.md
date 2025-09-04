@@ -30,4 +30,4 @@ Más allá del desarrollo técnico, nuestro propósito es:
 ## 📸 Galería (soon tm)
 
 ## 👥 Autores
-Proyecto desarrollado en la **Facultad del Ejército Argentino** por el equipo **Comando Robotico**.  
+Proyecto desarrollado en la **Facultad del Ejército Argentino** por el equipo **Legión de Ohm**.  
