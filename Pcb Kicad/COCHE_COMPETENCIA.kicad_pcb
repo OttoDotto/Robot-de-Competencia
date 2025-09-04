@@ -13401,6 +13401,32 @@
 			(justify right bottom)
 		)
 	)
+	(gr_text "ANTENA"
+		(at 150.241 30.607 0)
+		(layer "F.SilkS")
+		(uuid "d821bf06-d0ea-4ae9-8511-b34767fb99ec")
+		(effects
+			(font
+				(size 2 2)
+				(thickness 0.45)
+				(bold yes)
+			)
+			(justify right bottom)
+		)
+	)
+	(gr_text "USB"
+		(at 147.193 72.39 0)
+		(layer "F.SilkS")
+		(uuid "e4a01556-7872-4049-a69c-ea0f5a99ab9f")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.375)
+				(bold yes)
+			)
+			(justify right bottom)
+		)
+	)
 	(gr_text "MOTOR"
 		(at 183.769 51.181 0)
 		(layer "F.SilkS")
