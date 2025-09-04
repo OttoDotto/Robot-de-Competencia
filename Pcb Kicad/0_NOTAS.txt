@@ -6,9 +6,8 @@ OBJETIVO PRINCIPAL:	Armar el circuito de control del robot de competencia - Segu
 
 REQUIRIMIENTOS:
 * Debe tener espacio para sostener los motores o agarrarlos desde el pcb. (optimizar lugar - como en el caso de los competidores)
-* Debe tener entradas para la placa de sensores. Conector plano o molex, recibe la lecturas Analógicas y los alimenta vcc&gnd
+* Debe tener entradas para la placa de sensores. Conector plano o molex, recibe la lecturas Analógicas y los alimenta vcc&gnd + LED_OFF(IR)
 * Debe tener tira de pines para quitar o cambiar los puentesH o el uc
-* Debe tener cables con un conector para alimentar la pcb
 * Debe tener un regulador de tensión para alimentar desde una pila externa mediante un conector (con. cable-cable)
 * Si es necesario usaremos componentes SMD
 * En el caso del seguidor, vamos a usar:
@@ -21,17 +20,17 @@ REQUIRIMIENTOS:
 
 
 TO-DO:
-* Charlar sobre el presupuesto y tiempo a dedicar + que buscamos conseguir con la competencia	(Aprobar TD2)
-* Leer los reglamentos en caso de excepciones con los componentes que usemos
-* Buscar y definir que baterias vamos a utilizar
-* Definir el tamaño del pcb y chasis (Trapecio)
 * Buscar el modelo 3D aprox de los motores
-* Buscar y definir que conectores vamos a usar
+* Buscar y definir que conectores vamos a usar (TIRA DE PINES + )
 * Verificar el micro-controlador que estamos usando
 
 
 DONE:
+* Leer los reglamentos en caso de excepciones con los componentes que usemos
 * Sensores a usar QTR-8A. Pueden trabajar con 3.3V  (Modulo de 8 sensores con 11 pines, vcc y gnd + 8 salidas Analogs + pin apagarleds)
+* Charlar sobre el presupuesto y tiempo a dedicar + que buscamos conseguir con la competencia	(Aprobar TD2)
+* Buscar y definir que baterias vamos a utilizar
+* Definir el tamaño del pcb y chasis (Trapecio)
 
 
 APUNTES:
@@ -52,7 +51,7 @@ S8 → GPIO14
 Puente H izquierdo (M1) – lado izquierdo del ESP32
 IN1_M1 → GPIO26 (PWM)
 IN2_M1 → GPIO25 (PWM)
-SLEEP_M1 → GPIO16		(PROBLEMA, ESTA DEL OTRO LADO)
+SLEEP_M1 → GPIO16
 
 Puente H derecho (M2) – lado derecho del ESP32
 IN1_M2 → GPIO21 (PWM)
@@ -62,7 +61,7 @@ SLEEP_M2 → GPIO23
 Botones, buzzer, LED (abajo/derecha)
 SW1 → GPIO22 (entrada con pull-up interno)
 SW2 → GPIO19 (entrada con pull-up interno)
-BUZZER → GPIO17 (PWM con LEDC)			(PROBLEMA, queda atrapado)
+BUZZER → GPIO17 (PWM con LEDC)
 LED → GPIO13 (salida)
 
 	
