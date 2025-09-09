@@ -1,6 +1,10 @@
 #include <Arduino.h>
 #include "drv8833.hpp"
 
+/*
+  PROGRAMA PARA PRUEBA DE MOTORES
+*/
+
 // MOTOR IZQUIERDO
 // Pines
 const uint8_t motorPinIN1_Izq = 18;

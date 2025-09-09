@@ -20,9 +20,29 @@ REQUIRIMIENTOS:
 
 
 TO-DO:
+* REVISAR EL REGULADOR DE TENSION DE LA PCB (7805 -> AMS1117) 
+	- cambiar por regulador Low voltage dropout
+	- 7805 SMD son 2V, MINIMO NECESITA 7V y casi 9V
+	- AMS1117 SMD son 1.1V, NECESITA 6V Y CASI 7V
+
+* REVISAR LOS BOTONES PULLDOWN (peligroso)
+	1. poner una resistencia que vaya al micro
+	2. cambiar por un pull down
+	3. o usar pull down	(NO USAR EL PUENTE)
+	4. cap de 100n (anti-rebote)
+
+* REVISAR COMO CONECTAR LA ALIMENTACION
+	- SISTEMA ANTI-PUJOL
+	- CONECTOR "POLARIZADO"
+	- DIODO SHOCKY EN DIRECTA
+
+* SISTEMA MEDIDOR DE NIVEL DE BATERIA
+	- Divisor de tension (8.4 a 3.3 [3.2] Volts) + Diodos de protec (BTA) o diodos simples + CAP
+	- Tambien es protec de sobretension (version 2)
+	- TEST POINTS [mas facil]
+
 * Buscar el modelo 3D aprox de los motores
 * Buscar y definir que conectores vamos a usar (TIRA DE PINES + )
-* Verificar el micro-controlador que estamos usando
 
 
 DONE:
@@ -31,6 +51,7 @@ DONE:
 * Charlar sobre el presupuesto y tiempo a dedicar + que buscamos conseguir con la competencia	(Aprobar TD2)
 * Buscar y definir que baterias vamos a utilizar
 * Definir el tamaño del pcb y chasis (Trapecio)
+* Verificar el micro-controlador que estamos usando	(ESP WROOM 32 - DEVKIT V1 - USB C y B)
 
 
 APUNTES:
