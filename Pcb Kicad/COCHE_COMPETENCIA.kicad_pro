@@ -38,8 +38,8 @@
         "other_text_upright": false,
         "pads": {
           "drill": 1.0,
-          "height": 1.8,
-          "width": 2.4
+          "height": 3.6,
+          "width": 2.6
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -187,7 +187,6 @@
       ],
       "track_widths": [
         0.0,
-        0.4,
         0.6,
         0.8
       ],
@@ -661,6 +660,18 @@
           "group_by": false,
           "label": "#",
           "name": "${ITEM_NUMBER}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Device",
+          "name": "Sim.Device",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Pins",
+          "name": "Sim.Pins",
           "show": false
         }
       ],

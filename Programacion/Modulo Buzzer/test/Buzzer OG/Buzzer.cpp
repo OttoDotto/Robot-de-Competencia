@@ -18,7 +18,8 @@ void playTheme(const int *melody, const int *durations, int length) {
 void setup() {
   buzzer.begin();
   playTheme(imperialMelody, imperialDurations, imperialLength);
-  playTheme(melody, durations, length);
+
+//  playTheme(melody, durations, length);
 
 }
 
