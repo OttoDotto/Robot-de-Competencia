@@ -34,7 +34,7 @@ int16_t baseSpeed = 50;
 int16_t baseSpeedRecta = 82;
 int16_t baseSpeedCurva = 65;
 int16_t baseSpeedCurvaCerrada = 50; 
-int16_t maxSpeed  = 100;  // Límite de PWM
+int16_t maxSpeed  = 80;  // Límite de PWM
 long lastError = 0; 
 long integral = 0;
 
