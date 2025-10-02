@@ -24,17 +24,18 @@ const uint8_t SensorCount = 8; uint16_t sensorValues[SensorCount];
 
 
 // ====================================== // CONTROL PID // ========================================= 
-float Kp = 0.0; 
-float Kd = 0.0; 
-const float KpRecta = 0.005; 
-const float KpCurva = 0.015;
-const float KpCurvaCerrada = 0.03; 
+float Kp = 0.0;
+float Ki = 0.0000075; 
+float Kd = 0.0;
+const float KpRecta = 0.000105; //0.0021
+const float KpCurva = 0.0095; //0.019
+const float KpCurvaCerrada = 0.005; //0.02
 
 int16_t baseSpeed = 50; 
-int16_t baseSpeedRecta = 82;
-int16_t baseSpeedCurva = 65;
-int16_t baseSpeedCurvaCerrada = 50; 
-int16_t maxSpeed  = 100;  // Límite de PWM
+int16_t baseSpeedRecta = 60; //90;
+int16_t baseSpeedCurva = 60; //75;
+int16_t baseSpeedCurvaCerrada = 50; //60; 
+int16_t maxSpeed  = 90;  // Límite de PWM
 long lastError = 0; 
 long integral = 0;
 
@@ -99,12 +100,12 @@ void loop() {
 
 
     float P = Kp * error; // Proporcional
-    //integral += error;
-    //integral = constrain(integral, -10000, 10000); //Limita acumulación
-    //float I = Ki * integral;
+    integral += error;
+    integral = constrain(integral, -10000, 10000); //Limita acumulación
+    float I = Ki * integral;
     //float D = Kd * (error - lastError);
 
-    float PIDvalue = P; //+ I + D;
+    float PIDvalue = P + I; //+ D;
 
     lastError = error;
 
@@ -113,18 +114,15 @@ void loop() {
     int16_t motorSpeedDer = baseSpeed + PIDvalue;
 
     // Limitar a rango válido incluyendo negativos
-    motorSpeedIzq = constrain(motorSpeedIzq, 0, maxSpeed);
-    motorSpeedDer = constrain(motorSpeedDer, 0, maxSpeed);
+    motorSpeedIzq = constrain(motorSpeedIzq, -maxSpeed, maxSpeed);
+    motorSpeedDer = constrain(motorSpeedDer, -maxSpeed, maxSpeed);
 
-      // Apagar si es menor al umbral
-    if (motorSpeedIzq < 50 && motorSpeedIzq > 0) motorSpeedIzq = 0;
-    if (motorSpeedDer < 50 && motorSpeedDer > 0) motorSpeedDer = 0;
 
       // --- Control de motores ---
     if (motorSpeedIzq > 0) {
       motorIzq.forward(motorSpeedIzq);
     } else if (motorSpeedIzq < 0) {
-        motorIzq.reverse(57);
+        motorIzq.reverse(motorSpeedIzq-50);
       } else {
           motorIzq.stop();
         }
@@ -132,7 +130,7 @@ void loop() {
     if (motorSpeedDer > 0) {
       motorDer.forward(motorSpeedDer);
     } else if (motorSpeedDer < 0) {
-        motorDer.reverse(57);
+        motorDer.reverse(motorSpeedDer-50);
       } else {
         motorDer.stop();
       }
