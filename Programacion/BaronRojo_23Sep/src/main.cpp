@@ -5,6 +5,8 @@
 const int ledMotores = 13;      // LED para encender/apagar motores
 const int ledCalibracion = 2;     // LED azul que indica calibración finalizada
 
+//GPIO de botones: 19:SW15 y 22:SW16
+
 // ================================= // CONFIGURACIÓN DE MOTORES // ================================= 
 // MOTOR IZQUIERDO 
 const uint8_t motorPinIN1_Izq = 18; const uint8_t motorPinIN2_Izq = 21; const uint8_t motorPinSleep_Izq = 23;
@@ -25,16 +27,16 @@ const uint8_t SensorCount = 8; uint16_t sensorValues[SensorCount];
 
 // ====================================== // CONTROL PID // ========================================= 
 float Kp = 0.0;
-float Ki = 0.0000075; 
+float Ki = 0.000012; //0.0000075
 float Kd = 0.0;
-const float KpRecta = 0.000105; //0.0021
-const float KpCurva = 0.0095; //0.019
-const float KpCurvaCerrada = 0.005; //0.02
+const float KpRecta = 0.0019; //0.0021
+const float KpCurva = 0.019; //0.019
+const float KpCurvaCerrada = 0.024; //0.024
 
 int16_t baseSpeed = 50; 
-int16_t baseSpeedRecta = 60; //90;
-int16_t baseSpeedCurva = 60; //75;
-int16_t baseSpeedCurvaCerrada = 50; //60; 
+int16_t baseSpeedRecta = 90; //90;
+int16_t baseSpeedCurva = 75; //75;
+int16_t baseSpeedCurvaCerrada = 60; //60; 
 int16_t maxSpeed  = 90;  // Límite de PWM
 long lastError = 0; 
 long integral = 0;
@@ -122,7 +124,8 @@ void loop() {
     if (motorSpeedIzq > 0) {
       motorIzq.forward(motorSpeedIzq);
     } else if (motorSpeedIzq < 0) {
-        motorIzq.reverse(motorSpeedIzq-50);
+        motorSpeedIzq = motorSpeedIzq - 28;
+        motorIzq.reverse(abs(motorSpeedIzq));
       } else {
           motorIzq.stop();
         }
@@ -130,7 +133,8 @@ void loop() {
     if (motorSpeedDer > 0) {
       motorDer.forward(motorSpeedDer);
     } else if (motorSpeedDer < 0) {
-        motorDer.reverse(motorSpeedDer-50);
+        motorSpeedDer = motorSpeedDer - 28;
+        motorDer.reverse(abs(motorSpeedDer));
       } else {
         motorDer.stop();
       }
