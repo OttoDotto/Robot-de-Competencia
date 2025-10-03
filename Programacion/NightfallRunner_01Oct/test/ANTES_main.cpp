@@ -6,31 +6,28 @@
 #include "Pitches.hpp"
 #include "PIDController.hpp"
 
+// ================================= // CONFIGURACIÓN DE MOTORES // =================================
 // MOTOR IZQUIERDO
-// Pines
-const uint8_t motorPinIN1_Izq = 18;
-const uint8_t motorPinIN2_Izq = 21;
+const uint8_t motorPinIN1_Izq = 21;   const uint8_t motorPinIN2_Izq = 18;
 const uint8_t motorPinSleep_Izq = 23;
 
 // MOTOR DERECHO
-// Pines
-const uint8_t motorPinIN1_Der = 26;
-const uint8_t motorPinIN2_Der = 25;
+const uint8_t motorPinIN1_Der = 26;   const uint8_t motorPinIN2_Der = 25;
 const uint8_t motorPinSleep_Der = 16;
 
-// Canales PWM
+// Ajustes PWM MOTORES
 const uint8_t motorPWM = 0; // Canal PWM 0
-// Ajustes PWM
 const uint32_t freqPWM = 10000; // Frecuencia del PWM = 10KHz
 const uint8_t resPWM = 8;       // Resolución de 8 bits = 256 valores posibles [0, 255]
 
-// Creación de dos objetos de la clase Motor
 Drv8833 motorDer;
 Drv8833 motorIzq;
 
+// ================================= // CONFIGURACIÓN DE BUZZER // =================================
 const uint8_t BuzzerPwm = 1; // Canal PWM 1
 Buzzer buzzer(17, BuzzerPwm);
 
+// ================================= // CONFIGURACIÓN DE INTERRUPCIONES  // =================================
 const int LED_INTERNAL = 2;
 const int LED_EXTERNAL = 13;
 const int BTN_RUN = 22;
@@ -43,22 +40,69 @@ QTRSensors qtr;
 const uint8_t SensorCount = 8; 
 uint16_t sensorValues[SensorCount];
 
-// ================================= // CONTROL PID // =================================
-const float KpRecta = 0.005;
-const float KpCurva = 0.015;
-const float KpCurvaCerrada = 0.03;
+// ================================= // CONTROL PID ADAPTATIVO // =================================
+const float KpRecta = 0.2;          // rectas
+const float KpCurva = 0.1;          // curvas abiertas
+const float KpCurvaCerrada = 0.1;   // curvas cerradas
 
 PIDController pid(KpRecta, 0.0, 0.0);
 
-int16_t baseSpeed = 50; 
-int16_t baseSpeedRecta = 82;
-int16_t baseSpeedCurva = 65;
-int16_t baseSpeedCurvaCerrada = 50; 
-int16_t maxSpeed  = 80;
+int16_t baseSpeed = 90;
+int16_t baseSpeedRecta = 95;        // % PWM
+int16_t baseSpeedCurva = 85;
+int16_t baseSpeedCurvaCerrada = 70;
+int16_t maxSpeed  = 100;
 
-// ================================= // INTERVALO LOOP // =================================
-unsigned long previousMillis = 0; 
-const long interval = 10;
+const long interval = 5;            // cada 5 ms
+unsigned long previousMillis = 0;
+
+
+void correr() {
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+
+    //Calcula un promedio ponderado de las lecturas de todos los sensores. (0 = extremo izquierda, 7000 = extremo derecha)
+    uint16_t position = qtr.readLineWhite(sensorValues);    // Leer posición de ínea negra
+    
+    // uint16_t position = qtr.readLineBlack(sensorValues); // Leer posición de ínea negra
+
+    float error = position - 3500;
+
+    // Selección de velocidad y Kp
+    if (abs(error) < 500) {
+      baseSpeed = baseSpeedRecta;
+      pid.setTunings(KpRecta, 0, 0);
+    } else if (abs(error) < 1500) {
+      baseSpeed = baseSpeedCurva;
+      pid.setTunings(KpCurva, 0, 0);
+    } else {
+      baseSpeed = baseSpeedCurvaCerrada;
+      pid.setTunings(KpCurvaCerrada, 0, 0);
+    }
+
+    // PID solo proporcional
+    int PIDvalue = int(pid.compute(error));
+
+    // Velocidades motores (%)
+    int16_t motorSpeedIzq = constrain(baseSpeed - PIDvalue, 0, maxSpeed);
+    int16_t motorSpeedDer = constrain(baseSpeed + PIDvalue, 0, maxSpeed);
+
+    // Control motores
+    if (motorSpeedIzq > 0) motorIzq.forward(motorSpeedIzq);
+    else motorIzq.stop();
+
+    if (motorSpeedDer > 0) motorDer.forward(motorSpeedDer);
+    else motorDer.stop();
+
+    // Debug
+    Serial.print(">error:"); Serial.print(error);
+    Serial.print(" PID:"); Serial.print(PIDvalue);
+    Serial.print(" PWM_Izq:"); Serial.print(motorSpeedIzq);
+    Serial.print(" PWM_Der:"); Serial.println(motorSpeedDer);
+  }
+}
 
 
 void parar() {
@@ -80,7 +124,7 @@ void calibracion() {
 
   Serial.println("[Calibración] sensores calibrando...");
   
-  for (uint16_t i = 0; i < 400; i++) {  qtr.calibrate(); }
+  for (uint16_t i = 0; i < 200; i++) {  qtr.calibrate(); }
   
   Serial.println("Calibracion lista!");
 
@@ -89,58 +133,6 @@ void calibracion() {
   buzzer.stop();
 }
 
-void correr() {
-  Serial.println("[Corredor] motores corriendo...");
-  // Mover los motores hacia adelante al 50% del PWM
-  motorIzq.forward(50);
-  motorDer.forward(50);
-
-  /*
-  unsigned long currentMillis = millis();
-
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
-
-    // Leer posición de línea
-    uint16_t position = qtr.readLineWhite(sensorValues);
-    float error = position - 3500;  // centro de 8 sensores = 3500
-
-    // Ajuste de velocidad y Kp dinámico
-    if (abs(error) < 500) {
-      baseSpeed = baseSpeedRecta; 
-      pid.setTunings(KpRecta, 0, 0);
-    } else if (abs(error) < 1500) {
-      baseSpeed = baseSpeedCurva; 
-      pid.setTunings(KpCurva, 0, 0);
-    } else {
-      baseSpeed = baseSpeedCurvaCerrada; 
-      pid.setTunings(KpCurvaCerrada, 0, 0);
-    }
-
-    // Calcular PID
-    float PIDvalue = pid.compute(error);
-
-    // Velocidades motores
-    int16_t motorSpeedIzq = constrain(baseSpeed - PIDvalue, 0, maxSpeed);
-    int16_t motorSpeedDer = constrain(baseSpeed + PIDvalue, 0, maxSpeed);
-
-    if (motorSpeedIzq < 50 && motorSpeedIzq > 0) motorSpeedIzq = 0;
-    if (motorSpeedDer < 50 && motorSpeedDer > 0) motorSpeedDer = 0;
-
-    // Control motores
-    if (motorSpeedIzq > 0) motorIzq.forward(motorSpeedIzq);
-    else motorIzq.stop();
-
-    if (motorSpeedDer > 0) motorDer.forward(motorSpeedDer);
-    else motorDer.stop();
-
-    // Debug
-    Serial.print(">error:"); Serial.print(error);
-    Serial.print(" PWM_Izq:"); Serial.print(motorSpeedIzq);
-    Serial.print(" PWM_Der:"); Serial.println(motorSpeedDer);
-  }
-  */
-}
 
 void setup()
 {

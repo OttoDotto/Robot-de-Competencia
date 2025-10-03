@@ -1,15 +1,17 @@
- #include <Arduino.h> 
+#include <Arduino.h> 
  #include "drv8833.hpp" 
  #include "QTRSensors.h"
 
 const int ledMotores = 13;      // LED para encender/apagar motores
 const int ledCalibracion = 2;     // LED azul que indica calibración finalizada
+const int ON_OFF = 19;
+const int CALIBRAR = 22;
+
+//GPIO de botones: 19:SW15 y 22:SW16
 
 // ================================= // CONFIGURACIÓN DE MOTORES // ================================= 
 // MOTOR IZQUIERDO 
-// const uint8_t motorPinIN1_Izq = 18; const uint8_t motorPinIN2_Izq = 21; const uint8_t motorPinSleep_Izq = 23;
-const uint8_t motorPinIN1_Izq = 21; const uint8_t motorPinIN2_Izq = 18; const uint8_t motorPinSleep_Izq = 23;
-
+const uint8_t motorPinIN1_Izq = 18; const uint8_t motorPinIN2_Izq = 21; const uint8_t motorPinSleep_Izq = 23;
 // MOTOR DERECHO 
 const uint8_t motorPinIN1_Der = 26; const uint8_t motorPinIN2_Der = 25; const uint8_t motorPinSleep_Der = 16;
 // Canales PWM 
@@ -19,6 +21,10 @@ const uint32_t freqPWM = 20000; const uint8_t resPWM = 8;
 // Objetos motores 
 Drv8833 motorDer; Drv8833 motorIzq;
 
+volatile bool motoresEncendidos = false;  // Estado actual de los motores
+void IRAM_ATTR toggleMotores() {
+  motoresEncendidos = !motoresEncendidos;
+}
 
 // ============================= // CONFIGURACIÓN DE SENSORES QTR // ================================ 
 QTRSensors qtr;
@@ -26,16 +32,17 @@ const uint8_t SensorCount = 8; uint16_t sensorValues[SensorCount];
 
 
 // ====================================== // CONTROL PID // ========================================= 
-float Kp = 0.0; 
-float Kd = 0.0; 
-const float KpRecta = 0.005; 
-const float KpCurva = 0.015;
-const float KpCurvaCerrada = 0.03; 
+float Kp = 0.0;
+float Ki = 0.000012; //0.0000075
+float Kd = 0.0;
+const float KpRecta = 0.0019; //0.0021
+const float KpCurva = 0.019; //0.019
+const float KpCurvaCerrada = 0.024; //0.024
 
-int16_t baseSpeed = 80; 
-int16_t baseSpeedRecta = 85;
-int16_t baseSpeedCurva = 65;
-int16_t baseSpeedCurvaCerrada = 50; 
+int16_t baseSpeed = 50; 
+int16_t baseSpeedRecta = 90; //90;
+int16_t baseSpeedCurva = 75; //75;
+int16_t baseSpeedCurvaCerrada = 60; //60; 
 int16_t maxSpeed  = 90;  // Límite de PWM
 long lastError = 0; 
 long integral = 0;
@@ -60,6 +67,8 @@ void setup() {
   // Configuración pines
   pinMode(ledMotores, OUTPUT);
   pinMode(ledCalibracion, OUTPUT);
+  pinMode(ON_OFF, INPUT_PULLUP);  // Botón con resistencia interna
+  attachInterrupt(digitalPinToInterrupt(ON_OFF), toggleMotores, RISING);
 
   //qtr.setEmitterPin(2);
 
@@ -69,11 +78,12 @@ void setup() {
   for (uint16_t i = 0; i < 400; i++) { 
     qtr.calibrate(); 
   } 
-Serial.println("Calibracion lista!");
-digitalWrite(ledCalibracion, LOW);
-digitalWrite(ledMotores, HIGH);
 
-delay(500);
+  Serial.println("Calibracion lista!");
+  digitalWrite(ledCalibracion, LOW);
+  digitalWrite(ledMotores, HIGH);
+
+  delay(500);
 }
 
 
@@ -82,11 +92,20 @@ delay(500);
 void loop() { 
   unsigned long currentMillis = millis();
 
+  if (!motoresEncendidos) {
+    motorIzq.stop();
+    motorDer.stop();
+    digitalWrite(ledMotores, LOW);
+  return;  // Salimos del loop si están apagados
+  } else {
+      digitalWrite(ledMotores, HIGH);
+    }
+
   if (currentMillis - previousMillis >= interval) {   // Leer sensores cada 'interval' ms 
     previousMillis = currentMillis;  // Leer posición de línea (0 = extremo izquierda, 7000 = extremo derecha)
     uint16_t position = qtr.readLineWhite(sensorValues); // usar para linea blanca: qtr.readLineWhite(sensorValues);  // usar para linea blanca: qtr.readLineBlack(sensorValues); 
     
-    float error = 3500 - position; // Centro de 8 sensores = 3500
+    float error = position - 3500; // Centro de 8 sensores = 3500
 
     if (abs(error) < 500) { // Recta 
       baseSpeed = baseSpeedRecta; 
@@ -101,12 +120,12 @@ void loop() {
 
 
     float P = Kp * error; // Proporcional
-    //integral += error;
-    //integral = constrain(integral, -10000, 10000); //Limita acumulación
-    //float I = Ki * integral;
+    integral += error;
+    integral = constrain(integral, -10000, 10000); //Limita acumulación
+    float I = Ki * integral;
     //float D = Kd * (error - lastError);
 
-    float PIDvalue = P; //+ I + D;
+    float PIDvalue = P + I; //+ D;
 
     lastError = error;
 
@@ -115,18 +134,16 @@ void loop() {
     int16_t motorSpeedDer = baseSpeed + PIDvalue;
 
     // Limitar a rango válido incluyendo negativos
-    motorSpeedIzq = constrain(motorSpeedIzq, 0, maxSpeed);
-    motorSpeedDer = constrain(motorSpeedDer, 0, maxSpeed);
+    motorSpeedIzq = constrain(motorSpeedIzq, -maxSpeed, maxSpeed);
+    motorSpeedDer = constrain(motorSpeedDer, -maxSpeed, maxSpeed);
 
-      // Apagar si es menor al umbral
-    if (motorSpeedIzq < 50 && motorSpeedIzq > 0) motorSpeedIzq = 0;
-    if (motorSpeedDer < 50 && motorSpeedDer > 0) motorSpeedDer = 0;
 
       // --- Control de motores ---
     if (motorSpeedIzq > 0) {
       motorIzq.forward(motorSpeedIzq);
     } else if (motorSpeedIzq < 0) {
-        motorIzq.reverse(57);
+        motorSpeedIzq = motorSpeedIzq - 28;
+        motorIzq.reverse(abs(motorSpeedIzq));
       } else {
           motorIzq.stop();
         }
@@ -134,7 +151,8 @@ void loop() {
     if (motorSpeedDer > 0) {
       motorDer.forward(motorSpeedDer);
     } else if (motorSpeedDer < 0) {
-        motorDer.reverse(57);
+        motorSpeedDer = motorSpeedDer - 28;
+        motorDer.reverse(abs(motorSpeedDer));
       } else {
         motorDer.stop();
       }
