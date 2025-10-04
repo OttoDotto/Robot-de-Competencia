@@ -31,32 +31,23 @@ uint16_t sensorValues[SensorCount];
 // ============================
 // CONTROL PID
 // ============================
-/*
-Reglas rápidas
-Oscilación → bajar Kp.
-Salirse hacia el exterior en curva → subir Kp o bajar baseSpeed.
-Pierde la línea en salida de curva → aumentar baseSpeed en recta o reducir Kp curva.
-*/
 float Kp = 0.0;
-const float KpRecta        = 0.004;  // rectas (corrección suave)
-const float KpCurva        = 0.015;  // curvas medias (más agresivo)
-const float KpCurvaCerrada = 0.025;  // curvas cerradas (más fuerte)
-float Ki = 0.0; //0.00002
-float Kd = 0.0; //0.0010
+float Ki = 0.000012;
+float Kd = 0.0;
+const float KpRecta = 0.0019;
+const float KpCurva = 0.019;
+const float KpCurvaCerrada = 0.024;
 
 // ============================
 // VELOCIDADES
 // ============================
-int16_t baseSpeed = 80; 
-int16_t baseSpeedRecta = 90; //90;
+int16_t baseSpeed = 75; 
+int16_t baseSpeedRecta = 85; //90;
 int16_t baseSpeedCurva = 75; //75;
-int16_t baseSpeedCurvaCerrada = 60; //60; 
+int16_t baseSpeedCurvaCerrada = 65; //60; 
 int16_t maxSpeed  = 95;  // Límite de PWM
-
-long lastError = 0; // error previo 
-long integral = 0;  // acumulador de control I
-int deadzone = 10;  // margen de no-movimiento
-
+long lastError = 0; 
+long integral = 0;
 
 // ====================================
 // INTERVALO MILLIS 
@@ -182,9 +173,9 @@ void loop() {
     integral += error;
     integral = constrain(integral, -10000, 10000); //Limita acumulación
     float I = Ki * integral;
-    float D = Kd * (error - lastError);
+    //float D = Kd * (error - lastError);
 
-    float PIDvalue = P + I + D;
+    float PIDvalue = P + I; //+ D;
 
     lastError = error;
 
@@ -197,31 +188,18 @@ void loop() {
     motorSpeedDer = constrain(motorSpeedDer, -maxSpeed, maxSpeed);
 
     // --- Control de motores ---
-    /* // ANTERIOR
     if (motorSpeedIzq > 0) {    motorIzq.forward(motorSpeedIzq);    }
     else if (motorSpeedIzq < 0) {
         motorSpeedIzq = motorSpeedIzq - 28;
         motorIzq.reverse(abs(motorSpeedIzq));
     }
-    else {  motorIzq.forward(0);    }
+    else {  motorIzq.stop(); }
 
     if (motorSpeedDer > 0)  {    motorDer.forward(motorSpeedDer);    }
     else if (motorSpeedDer < 0) {
         motorSpeedDer = motorSpeedDer - 28;
         motorDer.reverse(abs(motorSpeedDer));
     }
-    else {  motorDer.forward(0);    }
-    }
-    */
-
-    // Motor Izquierdo
-    if (motorSpeedIzq > deadzone)           { motorIzq.forward(motorSpeedIzq);
-    } else if (motorSpeedIzq < -deadzone)   { motorIzq.reverse(abs(motorSpeedIzq));
-    } else {    motorIzq.stop();    }
-
-    // Motor Derecho
-    if (motorSpeedDer > deadzone)           { motorDer.forward(motorSpeedDer);
-    } else if (motorSpeedDer < -deadzone)   { motorDer.reverse(abs(motorSpeedDer));
-    } else {    motorDer.stop();    }
+    else {  motorDer.stop();    }
     }
 }
