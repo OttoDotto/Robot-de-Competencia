@@ -1,4 +1,7 @@
+// main.cpp
+
 #include <Arduino.h>
+
 #include "InterrupcionesRobot.hpp"
 
 const int LED_INTERNAL = 2;
@@ -8,26 +11,29 @@ const int BTN_STOP = 19;
 
 InterrupcionesRobot robot(LED_INTERNAL, LED_EXTERNAL, BTN_RUN, BTN_STOP);
 
-void calibracion() {
-    Serial.println("[Calibración] sensores calibrando...");
+// Funciones para cada modo
+void modoCalibracion() {
+    // Código que quieras ejecutar durante cada paso de calibración
+    Serial.println("[Calibración] Ejecutando calibración...");
 }
 
-void correr() {
-    Serial.println("[Corredor] motores corriendo...");
+void modoParado() {
+    // Código que quieras ejecutar mientras está detenido
+    Serial.println("[Parado] Motor apagado, esperando comando...");
 }
 
-void parar() {
-    Serial.println("[Parado] motores apagados...");
+void modoCorredor() {
+    // Código que quieras ejecutar cuando está en modo corredor
+    Serial.println("[Corredor] Motores encendidos, corriendo...");
 }
 
 void setup() {
-    Serial.begin(115200);
     robot.begin();
-    robot.onCalibration(calibracion);
-    robot.onRunning(correr);
-    robot.onStopped(parar);
+    robot.onCalibration(modoCalibracion);
+    robot.onStopped(modoParado);
+    robot.onRunning(modoCorredor);
 }
 
 void loop() {
-    robot.update();
+    robot.update(); // maneja interrupciones y llama las funciones según el modo
 }

@@ -5,24 +5,13 @@
 
 Buzzer buzzer(17);
 
-void setup() {
-    Serial.begin(115200);
-    buzzer.begin();
+// Cumpleaños feliz ? (simplificada)
+int melody[] = { NOTE_C4, NOTE_D4, NOTE_E4, NOTE_C5 };
+int durations[] = { 4, 4, 4, 2 };
 
-    // Reproducir todas las notas fundamentales de la octava 4 y 5
-    for (int octave = 4; octave <= 5; octave++) {
-        for (int n = 0; n < 7; n++) {
-            int freq = getNote(n, octave);
-            Serial.print(noteNames[n]);
-            Serial.print(octave);
-            Serial.print(": ");
-            Serial.println(freq);
-            buzzer.play(freq);
-            delay(400);
-            buzzer.stop();
-            delay(100);
-        }
-    }
+void setup() {
+  buzzer.begin();
+  buzzer.playMelody(melody, durations, 4); // mucho más limpio
 }
 
 void loop() {}

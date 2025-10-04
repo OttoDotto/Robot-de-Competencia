@@ -35,7 +35,9 @@ void loop() {
     previousMillis = currentMillis;
 
     // Leer línea negra calibrada
-    uint16_t position = qtr.readLineBlack(sensorValues);
+    //uint16_t position = qtr.readLineBlack(sensorValues);
+    uint16_t position = qtr.readLineWhite(sensorValues); // usar readLineBlack si línea negra
+        
 
     // Mostrar valores en monitor serial
     for (uint8_t i = 0; i < SensorCount; i++) {

@@ -1,22 +1,23 @@
+// InterrupcionesRobot.hpp
+
 #ifndef INTERRUPCIONES_ROBOT_H
 #define INTERRUPCIONES_ROBOT_H
 
 #include <Arduino.h>
 
-enum RobotMode { MODE_STOPPED, MODE_RUNNING, MODE_CALIBRATION };
+enum RobotMode { MODE_CALIBRATION, MODE_STOPPED, MODE_RUNNING };
 
 class InterrupcionesRobot {
 public:
-    InterrupcionesRobot(int ledInternalPin, int ledExternalPin,
-                        int btnRunPin, int btnStopPin);
+    InterrupcionesRobot(int ledInternalPin, int ledExternalPin, int btnRunPin, int btnStopPin);
 
     void begin();
-    void update(); // Llamar en loop()
+    void update(); // llamar en loop
 
     // Asignar funciones externas para cada modo
     void onCalibration(void (*func)());
-    void onRunning(void (*func)());
     void onStopped(void (*func)());
+    void onRunning(void (*func)());
 
 private:
     int ledInternal;
@@ -24,24 +25,35 @@ private:
     int btnRun;
     int btnStop;
 
-    volatile bool runPressed;
-    volatile bool stopPressed;
-    volatile RobotMode currentMode;
+    volatile bool buttonRunPressed;
+    volatile int pressCount;
 
-    unsigned long calibStartTime;
-    const unsigned long calibDuration = 5000;
+    bool ledExternalState;
     unsigned long lastBlinkTime;
     const unsigned long blinkInterval = 300;
 
-    void (*funcCalibration)();
-    void (*funcRunning)();
-    void (*funcStopped)();
+    bool modePrinted;
 
-    static InterrupcionesRobot* instance;
+    // Calibración
+    int calibStep;
+    unsigned long lastCalibTime;
+    const unsigned long calibInterval = 1000;
+    bool calibActive;
+
+    RobotMode currentMode;
+
+    // Funciones callback externas
+    void (*funcCalibration)();
+    void (*funcStopped)();
+    void (*funcRunning)();
+
+    // ISRs
     static void IRAM_ATTR handleRunStatic();
     static void IRAM_ATTR handleStopStatic();
     void handleRun();
     void handleStop();
+
+    static InterrupcionesRobot* instance; // para acceso en ISRs
 };
 
 #endif
