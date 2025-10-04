@@ -66,13 +66,17 @@ Buzzer buzzer(17, BuzzerPwm);
 // ============================
 const int ledMotores = 13;          // LED para encender/apagar motores
 const int ledCalibracion = 2;       // LED azul que indica calibración finalizada
-const int BTN_RUN = 19;
-const int BTN_STOP = 22;
+const int ON_OFF = 19;
+const int CALIBRAR = 22;
 
 // INTERRUPCIONES
 bool RUN = false;
-void IRAM_ATTR handleRun()  {RUN = true;}
-void IRAM_ATTR handleStop() {RUN = false;}
+
+// ISR: botón ON
+void IRAM_ATTR handleOn() {RUN = true;}
+
+// ISR: botón OFF
+void IRAM_ATTR handleOff() {RUN = false;}
 
 
 // ============================
@@ -80,24 +84,38 @@ void IRAM_ATTR handleStop() {RUN = false;}
 // ============================
 void calibrarSensores()
 {
-    buzzer.play(NOTE_A4);
-    delay(150);
-    buzzer.stop();
-
     motorIzq.stop();
     motorDer.stop();
 
     // Serial.println("Calibrando sensores..."); 
     digitalWrite(ledCalibracion, HIGH);
 
-    for (uint16_t i = 0; i < 350; i++) { qtr.calibrate(); } 
+    for (uint16_t i = 0; i < 400; i++) { qtr.calibrate(); } 
 
     // Serial.println("Calibracion lista!");
     digitalWrite(ledCalibracion, LOW);
+    //delay(500);
+}
 
-    buzzer.play(NOTE_C5);
-    delay(200);
-    buzzer.stop();
+
+// ============================
+// FUNCION DE PRUEBAS
+// ============================
+void debug()
+{
+    //motorDer.forward(100);  // ASI VIMOS QUE DEBIAN TENER DISTINTO CANAL DE PWM
+    //motorIzq.forward(0);
+
+    uint16_t position = qtr.readLineBlack(sensorValues); 
+    // usar para linea blanca:  qtr.readLineWhite(sensorValues);
+    // usar para linea blanca: qtr.readLineBlack(sensorValues); 
+
+    // Mostrar valores en monitor serial
+    for (uint8_t i = 0; i < SensorCount; i++) {
+      Serial.print(sensorValues[i]);
+      Serial.print('\t');
+    }
+    Serial.println(position);
 }
 
 
@@ -105,8 +123,7 @@ void calibrarSensores()
 // SETUP
 // ============================
 void setup() {
-    //Serial.begin(115200);
-    buzzer.begin();         // 2 kHz y 8 bits
+    Serial.begin(115200);
 
     // Configuración motores
     motorDer.setup(motorPinIN1_Der, motorPinIN2_Der, motorPinSleep_Der, motorPWM_Der, freqPWM, resPWM);
@@ -119,15 +136,18 @@ void setup() {
     // Configuración pines
     pinMode(ledMotores, OUTPUT);
     pinMode(ledCalibracion, OUTPUT);
-    pinMode(BTN_RUN, INPUT);            // botones pulldown
-    pinMode(BTN_STOP, INPUT);
 
-    // Interrupciones de arranque y parada
-    attachInterrupt(digitalPinToInterrupt(BTN_RUN), handleRun, RISING);
-    attachInterrupt(digitalPinToInterrupt(BTN_STOP), handleStop, RISING);
-
-    // Calibración
+    // Realizamos la calibracion (obtener los valores maximos)
     calibrarSensores();
+
+    /* // ALGO SE LEYO EN CALIBRACION - como se vio aca abajo.
+    uint16_t position = qtr.readLineBlack(sensorValues); 
+
+    for (uint8_t i = 0; i < SensorCount; i++) {
+      Serial.print(sensorValues[i]);
+      Serial.print('\t');
+    }
+    */
 }
 
 
@@ -135,14 +155,6 @@ void setup() {
 // LOOP
 // ============================
 void loop() {
-    if (!RUN)
-    {
-        digitalWrite(ledMotores, LOW);
-        motorIzq.stop();
-        motorDer.stop();
-        return;
-    }
-
     digitalWrite(ledMotores, HIGH);
     unsigned long currentMillis = millis();
     
@@ -195,11 +207,15 @@ void loop() {
     }
     else {  motorIzq.stop(); }
 
-    if (motorSpeedDer > 0)  {    motorDer.forward(motorSpeedDer);    }
+    if (motorSpeedDer > 0) {    motorDer.forward(motorSpeedDer);    }
     else if (motorSpeedDer < 0) {
         motorSpeedDer = motorSpeedDer - 28;
         motorDer.reverse(abs(motorSpeedDer));
     }
     else {  motorDer.stop();    }
+
+    //Serial.print(">error:"); Serial.print(error);
+    //Serial.print(" PWM_Izq:"); Serial.print(motorSpeedIzq);
+    //Serial.print(" PWM_Der:"); Serial.println(motorSpeedDer);
     }
 }
