@@ -1,3 +1,9 @@
+#ifdef DEBUG    // "Funcion" para debuggear sin tener que comentar los Prints o partes de codigo.
+    #define deb(x) x
+#else
+    #define deb(x)
+#endif
+
 #include <Arduino.h>
 #include "drv8833.hpp"
 #include "QTRSensors.h"
@@ -29,34 +35,27 @@ const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
 
 // ============================
-// CONTROL PID
+// CONTROL PID                      -       ESTE PID ESTA MAL, O ES ADAPTATIVO O ES PID....
 // ============================
-/*
-Reglas rápidas
-Oscilación → bajar Kp.
-Salirse hacia el exterior en curva → subir Kp o bajar baseSpeed.
-Pierde la línea en salida de curva → aumentar baseSpeed en recta o reducir Kp curva.
-*/
 float Kp = 0.0;
-const float KpRecta        = 0.004;  // rectas (corrección suave)
-const float KpCurva        = 0.015;  // curvas medias (más agresivo)
-const float KpCurvaCerrada = 0.025;  // curvas cerradas (más fuerte)
-float Ki = 0.0; //0.00002
-float Kd = 0.0; //0.0010
+const float KpRecta        = 0.0017;  // rectas
+const float KpCurva        = 0.031;  // curvas medias
+const float KpCurvaCerrada = 0.037;  // curvas cerradas
+float Ki = 0.00005;// 0.0002;
+float Kd = 0.0009;// 0.0010;
+
 
 // ============================
-// VELOCIDADES
+// VELOCIDADES                      -       SI FUERA PID, SERIA UNA SOLA VELOCIDAD, TOTAL LA SACA DEL error
 // ============================
-int16_t baseSpeed = 80; 
+int16_t baseSpeed = 50; 
 int16_t baseSpeedRecta = 90; //90;
-int16_t baseSpeedCurva = 75; //75;
-int16_t baseSpeedCurvaCerrada = 60; //60; 
-int16_t maxSpeed  = 95;  // Límite de PWM
+int16_t baseSpeedCurva = 85; //75;
+int16_t baseSpeedCurvaCerrada = 80; //60; 
+int16_t maxSpeed  = 90;  // Límite de PWM
 
 long lastError = 0; // error previo 
 long integral = 0;  // acumulador de control I
-int deadzone = 10;  // margen de no-movimiento
-
 
 // ====================================
 // INTERVALO MILLIS 
@@ -96,12 +95,12 @@ void calibrarSensores()
     motorIzq.stop();
     motorDer.stop();
 
-    // Serial.println("Calibrando sensores..."); 
+    deb(Serial.println("Calibrando sensores..."); )
     digitalWrite(ledCalibracion, HIGH);
 
-    for (uint16_t i = 0; i < 350; i++) { qtr.calibrate(); } 
+    for (uint16_t i = 0; i < 300; i++) { qtr.calibrate(); } 
 
-    // Serial.println("Calibracion lista!");
+    deb(Serial.println("Calibracion lista!");)
     digitalWrite(ledCalibracion, LOW);
 
     buzzer.play(NOTE_C5);
@@ -114,7 +113,7 @@ void calibrarSensores()
 // SETUP
 // ============================
 void setup() {
-    //Serial.begin(115200);
+    deb(Serial.begin(115200);)
     buzzer.begin();         // 2 kHz y 8 bits
 
     // Configuración motores
@@ -144,8 +143,7 @@ void setup() {
 // LOOP
 // ============================
 void loop() {
-    if (!RUN)
-    {
+    if (!RUN) {
         digitalWrite(ledMotores, LOW);
         motorIzq.stop();
         motorDer.stop();
@@ -158,13 +156,20 @@ void loop() {
     if (currentMillis - previousMillis >= interval) {   // Leer sensores cada 'interval' ms 
         previousMillis = currentMillis;  // Leer posición de línea (0 = extremo izquierda, 7000 = extremo derecha)
         
-        uint16_t position = qtr.readLineBlack(sensorValues);
-        // Serial.println(position);
+        uint16_t position = qtr.readLineWhite(sensorValues);
+        deb(Serial.println(position);)
         // usar para linea blanca:  qtr.readLineWhite(sensorValues);
-        // usar para linea blanca: qtr.readLineBlack(sensorValues); 
+        // usar para linea blanca:  qtr.readLineBlack(sensorValues); 
 
         float error = position - 3500; // Centro de 8 sensores = 3500
-
+    
+    /*PROBLEMA:
+    AL HACER ESTO YA DEJAMOS UNA VELOCIDAD FIJA
+    DESPUES LA QUIERE CORRIGIR EN LA PARTE DEL PID
+    SIN EMBARGO, DESPUES DE APLICAR EL PID VUELVE A ELEGIR LA VELOCIDAD
+    POR LO TANTO, ESTO NO ES NI PID, NI CONTROL ADAPTATIVO...
+    ES UN ON OFF QUE PONE UNA VELOCIDAD O OTRA!!
+    */
     if (abs(error) < 500) { // Recta 
         baseSpeed = baseSpeedRecta; 
         Kp = KpRecta;
@@ -188,6 +193,9 @@ void loop() {
 
     lastError = error;
 
+    // DE ACA PARA ABAJO EL CONTROL Y MOVIMIENTO ES CORRECTO.
+    // SI LA VEL ES < 0 SE PUEDE HACER UN MEJOR AJUSTE EN LAS CURVAS. 
+
     // Calcular velocidad motores
     int16_t motorSpeedIzq = baseSpeed - PIDvalue;
     int16_t motorSpeedDer = baseSpeed + PIDvalue;
@@ -197,31 +205,13 @@ void loop() {
     motorSpeedDer = constrain(motorSpeedDer, -maxSpeed, maxSpeed);
 
     // --- Control de motores ---
-    /* // ANTERIOR
-    if (motorSpeedIzq > 0) {    motorIzq.forward(motorSpeedIzq);    }
-    else if (motorSpeedIzq < 0) {
-        motorSpeedIzq = motorSpeedIzq - 28;
-        motorIzq.reverse(abs(motorSpeedIzq));
-    }
-    else {  motorIzq.forward(0);    }
+    // ANTERIOR
+    if      (motorSpeedIzq > 0) {   motorIzq.forward(motorSpeedIzq);        }
+    else if (motorSpeedIzq < 0) {   motorIzq.reverse(abs(motorSpeedIzq));   }
+    else                        {   motorIzq.forward(0);    }
 
-    if (motorSpeedDer > 0)  {    motorDer.forward(motorSpeedDer);    }
-    else if (motorSpeedDer < 0) {
-        motorSpeedDer = motorSpeedDer - 28;
-        motorDer.reverse(abs(motorSpeedDer));
-    }
-    else {  motorDer.forward(0);    }
-    }
-    */
-
-    // Motor Izquierdo
-    if (motorSpeedIzq > deadzone)           { motorIzq.forward(motorSpeedIzq);
-    } else if (motorSpeedIzq < -deadzone)   { motorIzq.reverse(abs(motorSpeedIzq));
-    } else {    motorIzq.stop();    }
-
-    // Motor Derecho
-    if (motorSpeedDer > deadzone)           { motorDer.forward(motorSpeedDer);
-    } else if (motorSpeedDer < -deadzone)   { motorDer.reverse(abs(motorSpeedDer));
-    } else {    motorDer.stop();    }
+    if      (motorSpeedDer > 0) {   motorDer.forward(motorSpeedDer);        }
+    else if (motorSpeedDer < 0) {   motorDer.reverse(abs(motorSpeedDer));   }
+    else                        {   motorDer.forward(0);    }
     }
 }
