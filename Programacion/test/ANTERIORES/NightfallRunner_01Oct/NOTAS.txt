@@ -1,0 +1,30 @@
+Tamaños especificos - Estos no cambian nunca, sin importar la plataforma.
+Tipo	    Tamaño	    Rango
+uint8_t	    1 byte	    0 a 255
+int8_t	    1 byte	    -128 a 127
+uint16_t	2 bytes	    0 a 65535
+int16_t	    2 bytes	    -32768 a 32767
+uint32_t	4 bytes	    0 a 4,294,967,295
+int32_t	    4 bytes     -2,147,483,648 a 2,147,483,647
+
+Cuándo usar cada tipo de variable
+* Para contar bytes, índices, pines o valores de sensores pequeños: → Usa uint8_t o int8_t
+Motivo: ahorra memoria y garantiza un tamaño exacto.
+
+* Para contadores o tiempos en milisegundos:                        → Usa uint32_t
+Motivo: evita overflow antes de los 49 días (como con millis()).
+
+* Para variables generales sin precisión crítica:                   → Usa int
+Motivo: es más legible y el compilador optimiza su uso.
+
+* Para cálculos con decimales:                                      → Usa float
+Motivo: permite valores fraccionarios, aunque es más lento en microcontroladores.
+
+* Para estados o flags (encendido/apagado, verdadero/falso):        → Usa bool o uint8_t
+Motivo: bool es más legible; uint8_t puede ser más eficiente en arrays o estructuras.
+
+* Para constantes que no cambian durante la ejecución:              → Usa const
+Motivo: mejora la legibilidad y evita modificaciones accidentales.
+
+* Para variables internas que deben recordar su valor entre ejecuciones de una función: → Usa static
+Motivo: mantiene el valor entre llamadas sin hacerlo global.
