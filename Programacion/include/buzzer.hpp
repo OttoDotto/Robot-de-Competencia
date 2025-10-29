@@ -18,7 +18,6 @@ const uint16_t NOTE_F5 = 698;
 const uint16_t NOTE_G5 = 784;
 const uint16_t NOTE_A5 = 880;
 const uint16_t NOTE_B5 = 988;
-
 #endif
 
 
@@ -63,5 +62,4 @@ class Buzzer {
       }
     }
 };
-
 #endif

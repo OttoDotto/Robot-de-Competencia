@@ -4,9 +4,7 @@
 * \author Legion de Ohm
  */
 
-#ifndef DRV8833_HPP
-#define DRV8833_HPP
-
+#pragma once
 /**
  * \brief Clase para drivers de motores Drv8833. Incluye funciones
  * que permiten configurar sus pines, ajustar el PWM y el movimiento de los motores.
@@ -56,5 +54,3 @@ private:
     uint32_t _freqPWM; // Frecuencia del PWM. (ESP32: De 10 Hz a 40 MHz)
     uint8_t _resPWM;   // Resolución del PWM. (ESP32: De 1 a 16 bits)
 };
-
-#endif

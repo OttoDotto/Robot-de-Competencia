@@ -1,0 +1,27 @@
+* PINES ESP32 ELEJIDOS:	(D = GPIO !!!!)
+Sensores (fila bajo el USB, contiguos para pistas rectas)
+S1 → GPIO36 (VP)
+S2 → GPIO39 (VN)
+S3 → GPIO34
+S4 → GPIO35
+S5 → GPIO32
+S6 → GPIO33
+S7 → GPIO27
+S8 → GPIO14
+
+Puente H izquierdo (M1) – lado izquierdo del ESP32
+IN1_M1 → GPIO26 (PWM)
+IN2_M1 → GPIO25 (PWM)
+SLEEP_M1 → GPIO16
+
+Puente H derecho (M2) – lado derecho del ESP32
+IN1_M2 → GPIO21 (PWM)
+IN2_M2 → GPIO18 (PWM)
+SLEEP_M2 → GPIO23
+
+Botones, buzzer, LED (abajo/derecha), SENSOR_IR
+SW1 → GPIO22    (entrada con pull-down)
+SW2 → GPIO19    (entrada con pull-down)
+BUZZER → GPIO17 (PWM con LEDC)
+LED → GPIO13    (salida)
+IR → GPIO04     (entrada con pull-up externo)
