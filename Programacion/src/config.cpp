@@ -16,19 +16,19 @@
 // ===================================
 #if (CORREDOR == NIGHTFALL)
     #define USAR_MICROS   1         // Cambiar a 0 para millis()
-    uint8_t baseSpeed = 95;         // Velocidad base PORCENTAJE DE PWM (0-100%)
-    const float Ku = 0.1;
-    const float Tu = 0.9;
+    uint8_t baseSpeed = 55;         // Velocidad base PORCENTAJE DE PWM (0-100%)
+    const float Ku = 0.05;
+    const float Tu = 0.50;
 #elif (CORREDOR == ARGENTUM)
     #define USAR_MICROS   0         // Cambiar a 0 para millis()
-    uint8_t baseSpeed = 75;         // Velocidad base PORCENTAJE DE PWM (0-100%)
+    uint8_t baseSpeed = 55;         // Velocidad base PORCENTAJE DE PWM (0-100%)
     const float Ku = 0.051;
     const float Tu = 0.31;
 #elif (CORREDOR == DIEGO)
     #define USAR_MICROS   0         // Cambiar a 0 para millis()
-    uint8_t baseSpeed = 90;         // Velocidad base PORCENTAJE DE PWM (0-100%)
-    const float Ku = 0.049;
-    const float Tu = 0.72;
+    uint8_t baseSpeed = 45;         // Velocidad base PORCENTAJE DE PWM (0-100%)
+    const float Ku = 0.051;
+    const float Tu = 0.31;
 #else
   #error "Valor de CORREDOR inválido. Use NIGHTFALL, ARGENTUM o DIEGO."
 #endif
