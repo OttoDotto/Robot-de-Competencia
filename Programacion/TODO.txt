@@ -1,0 +1,24 @@
+1. MODULO MOTORES:
+    El programa pierde tiempo al usar clases y objetos en los motores, reemplazar por funciones y variables
+
+2. Comentarios y Notas Makefile
+    El programa tenia un makefile pero hace que sea dificil de leer el codigo
+    De hecho es 80% comentarios, 20% codigo
+
+3. Sintonizacion PID:
+    Si existiera un trimmer o potenciometro es posible ajustar finamente el Ku
+    De ser posible tambien se podria usar para sintonizar y despues leer que valor tiene
+    
+4. SELECCION DE CORREDOR
+    Posiblemente se pueda sacar del config y del platformio
+    talvez pasarlo a un modulo para facilitar la compilacion
+    (Ajusta la vel base [+- correccion] y ctes PID)
+
+5. MAIN:
+    Quedaron algunas variables como la velocidad max, una variable stop y la zona muerta
+    Posiblemente se deben mover variables a otros modulos de forma que se entienda donde estan
+
+69. Extra - MAIN:
+    El programa funciona bien con la maquina de estados, es una maravilla y funciona excelente
+    pero es dificil de leer, puede asustar si no se entiende como se ejecuta por dentro la transicion
+    Capaz unos dibujos o alguna explicacion puede hacer que no pase eso (sumado al punto 3)

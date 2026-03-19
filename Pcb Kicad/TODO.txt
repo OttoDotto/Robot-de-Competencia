@@ -1,0 +1,21 @@
+* WIP - REEMPLAZAR esp32 por un Arduino nano
+	- achica la pcb, facilita la decision de pines y capaz es un trazado mas facil...
+
+* Hacer huella de bateria 9s (3s en el ESQ)
+
+* Buscar el modelo 3D aprox de los motores y Bateria
+
+* Buscar el nombre del conector de baterias 9s
+
+* REVISAR COMO CONECTAR LA ALIMENTACION
+	- SISTEMA ANTI-PUJOL
+	- CONECTOR "POLARIZADO" (baterias 9S)
+	- DIODO SHOCKY EN DIRECTA
+
+* Fabricacion china?
+	- samu: estando en 5to al menos debemos saber/aprender como pedir plaquetas afuera...
+	- en jlcpcb dicen que estan baratisimas, por ejemplo las placas de 4 capas son solo 2 dolares!
+	- Podriamos hacer pistas mas chicas y planos de alimentacion y de masa, achicando mas la placa
+
+* Basado en la sig. pieza, se puede colocar en el pcb como si fueran los motores?
+	https://www.thingiverse.com/thing:2543948

@@ -1,0 +1,175 @@
+(footprint "pololu"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 7 -1.373 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "31138f32-5d32-49cb-8859-8d900ab99698")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "pololu"
+		(at 7 0.127 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "9561caed-d401-45c5-8449-f4ac2db87464")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 -6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2243acfd-be9a-4531-96c4-d1e70235c800")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 -6 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5dbcfa77-aa98-4218-8365-70246b846b2c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_rect
+		(start -2.54 -4.3)
+		(end 0 -2.667)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "d1d62237-c2f7-4ed6-a148-775d89b55e13")
+	)
+	(fp_rect
+		(start -2.54 2.7)
+		(end 0 4.333)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "63308672-b2fc-4cd2-90e1-c8a93f34dc3a")
+	)
+	(fp_rect
+		(start 0 -6)
+		(end 24 6)
+		(stroke
+			(width 0.3)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "44aa65bb-ce26-4642-9ff7-f7c25549f476")
+	)
+	(fp_rect
+		(start 15.058 -5.619)
+		(end 23.677 5.619)
+		(stroke
+			(width 0.8)
+			(type default)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "486317ee-5bd3-45ea-9801-5e1fe582865f")
+	)
+	(fp_circle
+		(center -3.2512 -5.1736)
+		(end -2.7512 -5.1736)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "ff4670f1-b758-4d35-8728-e39671013432")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 7 1.627 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "d99afa5a-ee41-4ccd-b27b-98b3e7ba5e9f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at 20.2 -9.7)
+		(size 3 3)
+		(drill 3)
+		(layers "F&B.Cu" "*.Mask")
+		(uuid "08eb56bd-9d01-44f9-9de0-932967f3ef3d")
+	)
+	(pad "" np_thru_hole circle
+		(at 20.2 9.7)
+		(size 3 3)
+		(drill 3)
+		(layers "F&B.Cu" "*.Mask")
+		(uuid "73b62008-b17f-4756-8015-0e3fda393ebc")
+	)
+	(pad "1" connect roundrect
+		(at -1.27 -3.4835 270)
+		(size 1.325 1.8)
+		(layers "F.Cu" "F.Mask")
+		(roundrect_rratio 0.188679)
+		(uuid "8a1969dd-d3ae-4c57-89b5-307f3c0e62b4")
+	)
+	(pad "2" connect roundrect
+		(at -1.27 3.5165 270)
+		(size 1.325 1.8)
+		(layers "F.Cu" "F.Mask")
+		(roundrect_rratio 0.188679)
+		(uuid "8e983bf8-6dad-4704-bfbf-33b5a82756b6")
+	)
+	(embedded_fonts no)
+	(model "${KICAD9_3DMODEL_DIR}/Pololu/mmgm-pm.step"
+		(offset
+			(xyz 15.5 0 5)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -90)
+		)
+	)
+	(model "${KIPRJMOD}/include/Pololu/AnyConv.com__motor_housing.step"
+		(offset
+			(xyz 24.5 0 5.75)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 90 -180 -90)
+		)
+	)
+)

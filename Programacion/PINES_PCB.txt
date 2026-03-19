@@ -1,27 +1,49 @@
 * PINES ESP32 ELEJIDOS:	(D = GPIO !!!!)
-Sensores (fila bajo el USB, contiguos para pistas rectas)
-S1 → GPIO36 (VP)
-S2 → GPIO39 (VN)
-S3 → GPIO34
-S4 → GPIO35
-S5 → GPIO32
-S6 → GPIO33
-S7 → GPIO27
-S8 → GPIO14
 
-Puente H izquierdo (M1) – lado izquierdo del ESP32
-IN1_M1 → GPIO26 (PWM)
-IN2_M1 → GPIO25 (PWM)
-SLEEP_M1 → GPIO16
+📡 Sensores 
+(Fila bajo el USB, contiguos para pistas rectas)
+| Sensor |  Pin ESP32  |    Descripción    |
+|--------|-------------|-------------------|
+| S1     | GPIO36 (VP) | Entrada analógica |
+| S2     | GPIO39 (VN) | Entrada analógica |
+| S3     | GPIO34      | Entrada analógica |
+| S4     | GPIO35      | Entrada analógica |
+| S5     | GPIO32      | Entrada analógica |
+| S6     | GPIO33      | Entrada analógica |
+| S7     | GPIO27      | Entrada digital   |
+| S8     | GPIO14      | Entrada digital   |
 
-Puente H derecho (M2) – lado derecho del ESP32
-IN1_M2 → GPIO21 (PWM)
-IN2_M2 → GPIO18 (PWM)
-SLEEP_M2 → GPIO23
 
-Botones, buzzer, LED (abajo/derecha), SENSOR_IR
-SW1 → GPIO22    (entrada con pull-down)
-SW2 → GPIO19    (entrada con pull-down)
-BUZZER → GPIO17 (PWM con LEDC)
-LED → GPIO13    (salida)
-IR → GPIO04     (entrada con pull-up externo)
+⚙️ Puente H izquierdo (M1)  
+(Lado izquierdo del ESP32)
+| Señal     | Pin ESP32 | Función                 |
+|-----------|-----------|-------------------------|
+| IN1_M1    | GPIO26    | PWM                     |
+| IN2_M1    | GPIO25    | PWM                     |
+| SLEEP_M1  | GPIO16    | Control de habilitación |
+
+
+⚙️ Puente H derecho (M2)  
+(Lado derecho del ESP32)
+| Señal     | Pin ESP32 | Función                 |
+|-----------|-----------|-------------------------|
+| IN1_M2    | GPIO21    | PWM                     |
+| IN2_M2    | GPIO18    | PWM                     |
+| SLEEP_M2  | GPIO23    | Control de habilitación |
+
+   
+🔘 Botones, 🔔 Buzzer, 💡 LED, 📶 Sensor IR
+| Componente | Pin ESP32 | Configuración               |
+|------------|-----------|-----------------------------|
+| SW1        | GPIO22    | Entrada con pull-down       |
+| SW2        | GPIO19    | Entrada con pull-down       |
+| BUZZER     | GPIO17    | PWM con LEDC                |
+| LED        | GPIO13    | Salida digital              |
+| IR         | GPIO04    | Entrada con pull-up externo |
+
+
+📑 Resumen
+Este documento lista los pines utilizados en el proyecto con ESP32, organizados por función:  
+- Sensores de pista  
+- Puentes H para control de motores (M1 y M2)  
+- Botones, buzzer, LED y sensor IR  

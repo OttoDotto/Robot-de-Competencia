@@ -1,0 +1,9 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Arduino NANO")(type "KiCad")(uri "${KIPRJMOD}/include/Arduino NANO")(options "")(descr ""))
+  (lib (name "PololuLibrary")(type "KiCad")(uri "${KIPRJMOD}/include/Pololu/PololuLibrary.pretty")(options "")(descr ""))
+  (lib (name "XT60-M")(type "KiCad")(uri "${KIPRJMOD}/include/XT60-M")(options "")(descr ""))
+  (lib (name "DRV8833")(type "KiCad")(uri "${KIPRJMOD}/include/DRV8833/DRV8833.pretty")(options "")(descr ""))
+  (lib (name "Bateria_9S")(type "KiCad")(uri "${KIPRJMOD}/include/Bateria 9S/Bateria_9S.pretty")(options "")(descr ""))
+  (lib (name "switch6P")(type "KiCad")(uri "${KIPRJMOD}/include/SWITCH 6P/switch6P.pretty")(options "")(descr ""))
+)

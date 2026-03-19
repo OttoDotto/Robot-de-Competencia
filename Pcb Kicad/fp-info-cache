@@ -1,4 +1,11 @@
-24744380584278552
+24753247381247494
+Arduino NANO
+MODULE_ARDUINO_NANO
+
+
+0
+30
+30
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -13,6 +20,13 @@ audio belton reverb
 0
 7
 7
+Bateria_9S
+Bateria_Lado
+
+
+0
+2
+2
 Battery
 BatteryClip_Keystone_54_D16-19mm
 Battery clip for batteries with a diameter between 16-19 mm: https://www.keyelco.com/product.cfm/product_id/826
@@ -86708,6 +86722,13 @@ pam8403
 0
 9
 9
+PololuLibrary
+pololu
+
+
+0
+2
+2
 Potentiometer_SMD
 Potentiometer_ACP_CA6-VSMD_Vertical
 Potentiometer, vertical, ACP CA6-VSMD, http://www.acptechnologies.com/wp-content/uploads/2017/06/01-ACP-CA6.pdf
@@ -99539,6 +99560,13 @@ Varistor VF
 0
 2
 2
+XT60-M
+AMASS_XT60-M
+
+
+0
+2
+2
 esp32 devkit
 MODULE_ESP32-DEVKITC-32E
 
@@ -99546,3 +99574,10 @@ MODULE_ESP32-DEVKITC-32E
 0
 38
 38
+switch6P
+SWITCH_6PINS
+
+
+0
+6
+6

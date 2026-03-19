@@ -1,0 +1,136 @@
+(footprint "Bateria_Lado"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -0.5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "b74f4c63-dffb-4f4b-8760-04e8a7517bd8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "Bateria_Lado"
+		(at 0 1 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "00498a43-7efb-4fb0-9988-b3bef77d4d09")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ce40a89f-03da-4b31-8437-864702236743")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6344be1d-a3ba-42c3-bd27-14d9ebb30109")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_rect
+		(start -25 -6.25)
+		(end 25 6.25)
+		(stroke
+			(width 0.5)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "29f4fe17-c30e-4d8b-b8db-b6be4546bd80")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 2.5 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "09657d7b-d152-46ef-adfb-044c5070cd7f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "" np_thru_hole circle
+		(at -13 -8)
+		(size 3 3)
+		(drill 3)
+		(layers "*.Cu" "*.Mask")
+		(uuid "88922bf3-1f6d-4429-9624-94ed59f5d664")
+	)
+	(pad "" np_thru_hole circle
+		(at -13 8)
+		(size 3 3)
+		(drill 3)
+		(layers "F&B.Cu" "*.Mask")
+		(uuid "31e67593-e77e-467e-aa9b-9a41e68d3806")
+	)
+	(pad "" np_thru_hole circle
+		(at 13 -8)
+		(size 3 3)
+		(drill 3)
+		(layers "*.Cu" "*.Mask")
+		(uuid "8cc72fa8-fd4f-4ee8-8162-47c4e8fda488")
+	)
+	(pad "" np_thru_hole circle
+		(at 13 8)
+		(size 3 3)
+		(drill 3)
+		(layers "*.Cu" "*.Mask")
+		(uuid "093faa70-e809-4220-bdbd-9b1a97d78216")
+	)
+	(pad "1" smd roundrect
+		(at -23.4188 -1.7272)
+		(size 1.905 1.27)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(thermal_bridge_angle 45)
+		(uuid "a3f353d6-6256-458d-b10c-307d2d6f649b")
+	)
+	(pad "2" smd roundrect
+		(at -23.4188 2.1336)
+		(size 1.905 1.27)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(thermal_bridge_angle 45)
+		(uuid "a927f80e-a0a7-4e84-bb11-22b61c7c6a74")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/include/Bateria 9S/GNB3502S70AHV 18g v1.step"
+		(offset
+			(xyz -24.5 0 5.5)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
+)
